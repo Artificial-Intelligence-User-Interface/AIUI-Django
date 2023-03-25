@@ -102,27 +102,14 @@ def dataset(request):
     if request.method == 'POST':
         post = UploadDatasetForm(request.POST, request.FILES)
         project = Project.objects.get(id=int(post["project_id"].value()))
-        # directory = Directory(name=project.name)
-        # directory.save()
-        # dataset = DataSet(name=post['name'].value(), directory=directory.pk,project=project)
-        # # print('directory_id', dataset.directory_id)
-        # dataset.save()
-        # file = File(name=post['name'].value(),file=post.file.value(),directory=directory)
-        # file.save()
-        
         pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project.name}/")
         if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
-        pathDir += "dataset.json"
+        pathDir += "dataset.arff"
         project.dataset = pathDir
         project.save()
         handle_uploaded_file(request.FILES['file'], pathDir)
         return JsonResponse({'project_id':project.pk})
-    # elif request.method == "GET":
-    #     project = Project.objects.get(id=int(post["project_id"]))
-    #     dataset = project.dataset_set.first()
-    #     #file = project.dataset_set.first().directory.file_set.first()
-    #     return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
 
 def train(request):
     # needs dataset,params,aimodel
