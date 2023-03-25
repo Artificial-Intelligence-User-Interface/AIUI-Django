@@ -7,8 +7,8 @@ from django.conf import settings
 import os
 import time
 from .forms import UploadDatasetForm
-from SvmModel import trainSVM,runSVM
-from MLPClassifierModel import trainMLP, runMLP
+from .SvmModel import trainSVM,runSVM
+from .MLPClassifierModel import trainMLP, runMLP
 # Create your views here.
 
 def proj(request):
@@ -124,7 +124,7 @@ def train(request):
         accuracy, precision, pathDir = trainMLP(project.dataset,model.name,project.name)
     model.model = pathDir
     return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'accuracy': accuracy, 'precision':precision})
-    
+
 
 def output(request):
     #get the params
@@ -141,4 +141,3 @@ def output(request):
     elif model.typemodel == 'mlp':
         result = runMLP(data, pathDir)
     return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'result': result})
-    
