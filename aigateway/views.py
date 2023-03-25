@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 from django.http import JsonResponse
-from .models import Project, Directory, AiModel, DataSet, File
+from .models import Project, AiModel
 from datetime import datetime
 from django.conf import settings
 import os
@@ -55,9 +55,7 @@ def aimodel(request):
         typemodel = postDict['model_type']
         project = Project.objects.get(id=int(postDict['project_id']))
         # f=os.path.join( settings.STATIC_ROOT, 'myApp/myData.json' ) if collectstatic invoked
-        directory = Directory(name=postDict['name'])
-        directory.save()
-        aimodel = AiModel(name=name, typemodel=typemodel,project=project,directory='')
+        aimodel = AiModel(name=name, typemodel=typemodel,project=project,model='')
         aimodel.save()
         return JsonResponse({'models':[{'model_id':aimodel.pk,'name':postDict['name'],'type_model':typemodel,'project_id':project.pk}]})
     elif request.method == 'GET':
@@ -126,7 +124,7 @@ def train(request):
     # update location for aimodel obj to the loc of model file
     project = Project.objects.get(id=int(request.POST['project_id']))
     model = AiModel.objects.get(id=int(request.POST['model_id']))
-    
+
     pass
 
 def output(request):
