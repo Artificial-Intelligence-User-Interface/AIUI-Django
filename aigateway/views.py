@@ -127,6 +127,8 @@ def train(request):
         train = trainMLP(project.dataset,model.name,project.name)
         accuracy, pathDir = train[0], train[1]
     model.model = pathDir
+    model.save()
+    # print('model id', model.pk, ' path', pathDir, 'model.model ', model)
     return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'accuracy': accuracy})
 
 

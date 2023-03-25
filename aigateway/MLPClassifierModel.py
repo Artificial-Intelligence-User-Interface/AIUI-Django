@@ -29,6 +29,6 @@ def trainMLP(data,model,project):
     return [accuracy, pathDir + f"{project}_{model}_mlp.joblib"]
 
 def runMLP(data,file):
-    print(file)
+    # print(file)
     clf = joblib.load(file)
     return clf.predict(data)
