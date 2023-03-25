@@ -54,7 +54,7 @@ def aimodel(request):
     if request.method == 'POST':
         postDict = json.loads(request.body)
         name = postDict['name']
-        typemodel = postDict['model_type']
+        typemodel = postDict['type_model']
         project = Project.objects.get(id=int(postDict['project_id']))
         # f=os.path.join( settings.STATIC_ROOT, 'myApp/myData.json' ) if collectstatic invoked
         aimodel = AiModel(name=name, typemodel=typemodel,project=project,model='')
