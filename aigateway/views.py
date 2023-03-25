@@ -8,6 +8,7 @@ import os
 # Create your views here.
 
 def proj(request):
+    print(request)
     if request.method == 'GET':
         response = {}
         response['projects'] = []
@@ -30,7 +31,6 @@ def proj(request):
                 response['projects'].append(projAttr)
         return JsonResponse(response)
     elif request.method == "POST":
-        print(request)
         print(request.POST)
         project = Project(name=request.POST['name'], created=datetime.now(), last_updated=datetime.now())
         project.save()
