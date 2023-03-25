@@ -1,4 +1,4 @@
-from sklearn.neural_network import MLPClassifier
+from sklearn.neural_network import MLPRegressor
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -17,7 +17,7 @@ def trainMLP(data,model,project, pathDir):
     X = arffData[:, :-1]
     Y = arffData[:, -1]
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3,random_state=109)
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+    clf = MLPRegressor(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
     accuracy = metrics.accuracy_score(y_test, y_pred)
