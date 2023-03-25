@@ -112,7 +112,7 @@ def dataset(request):
         project.dataset = path
         project.save()
         handle_uploaded_file(request.FILES['file'], path)
-        return JsonResponse({'proj_id':project.pk})
+        return JsonResponse({'project_id':project.pk})
     # elif request.method == "GET":
     #     project = Project.objects.get(id=int(post["project_id"]))
     #     dataset = project.dataset_set.first()
