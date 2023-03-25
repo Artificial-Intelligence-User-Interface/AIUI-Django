@@ -32,4 +32,4 @@ def runMLP(data,file):
     # print(file)
     # npdata = np.array(data).values().reshape(1, -1)
     clf = joblib.load(file)
-    return clf.predict([data])
+    return list(clf.predict([data]))
