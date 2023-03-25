@@ -7,6 +7,7 @@ from django.conf import settings
 import os
 import time
 from .forms import UploadDatasetForm
+
 # Create your views here.
 
 def proj(request):
@@ -108,10 +109,14 @@ def dataset(request):
         # dataset.save()
         # file = File(name=post['name'].value(),file=post.file.value(),directory=directory)
         # file.save()
-        path = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{project.name}/dataset.json")
-        project.dataset = path
+        
+        pathDir = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{project.name}/")
+        if(not os.path.exists(pathDir)):
+            os.path.makedirs(pathDir)
+        pathDir += "dataset.json"
+        project.dataset = pathDir
         project.save()
-        handle_uploaded_file(request.FILES['file'], path)
+        handle_uploaded_file(request.FILES['file'], pathDir)
         return JsonResponse({'project_id':project.pk})
     # elif request.method == "GET":
     #     project = Project.objects.get(id=int(post["project_id"]))
