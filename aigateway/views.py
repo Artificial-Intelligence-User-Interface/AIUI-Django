@@ -101,6 +101,7 @@ def handle_uploaded_file(f, path):
 
 def dataset(request):
     if request.method == 'POST':
+        
         post = UploadDatasetForm(request.POST, request.FILES)
         project = Project.objects.get(id=int(post["project_id"].value()))
         pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project.name}/")
@@ -115,8 +116,9 @@ def dataset(request):
 def train(request):
     # needs dataset,params,aimodel
     # update location for aimodel obj to the loc of model file
-    project = Project.objects.get(id=int(request.POST['project_id']))
-    model = AiModel.objects.get(id=int(request.POST['model_id']))
+    post = json.loads(request.body)
+    project = Project.objects.get(id=int(post['project_id']))
+    model = AiModel.objects.get(id=int(post['model_id']))
     accuracy, precision, pathDir = None
     if model.typemodel == 'svg':
         accuracy, precision, pathDir = trainSVM(project.dataset,model.name,project.name)
@@ -130,9 +132,10 @@ def output(request):
     #get the params
     #run model
     #return output
-    data = request.POST['parameters']
-    project = Project.objects.get(id=int(request.POST['project_id']))
-    model = AiModel.objects.get(id=int(request.POST['model_id']))
+    post = json.loads(request.body)
+    data = post['parameters']
+    project = Project.objects.get(id=int(post['project_id']))
+    model = AiModel.objects.get(id=int(post['model_id']))
     pathDir = model.model
     result = None
     if model.typemodel == 'svg':
