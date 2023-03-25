@@ -6,6 +6,7 @@ from datetime import datetime
 from django.conf import settings
 import os
 import time
+from .forms import UploadDatasetForm
 # Create your views here.
 
 def proj(request):
@@ -39,7 +40,7 @@ def proj(request):
         project.save()
         return JsonResponse({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]})
 
-    
+
 
 def aimodel(request):
     # name = models.CharField(max_length=60)
@@ -71,7 +72,7 @@ def aimodel(request):
             modelAttr['model_id'] = model.pk
             response['models'].append(modelAttr)
         return JsonResponse(response)
-    
+
 # def config(request):
 #     if request.method == 'GET':
 #         model = AiModel.objects.get(id=int(request.GET['model_id']))
@@ -93,20 +94,21 @@ def aimodel(request):
 #     else:
 #         #open the file (create if non existant) for the model, paste the json config
 #         pass
-    
-        
+
+
 def dataset(request):
     if request.method == 'POST':
-        post = json.loads(request.body)
-        project = Project.objects.get(id=int(post["project_id"]))
+        post = UploadDatasetForm(request.POST, request.FILES)
+        project = Project.objects.get(id=int(post["project_id"].value()))
         directory = Directory(name=project.name)
         directory.save()
-        dataset = DataSet(name=post['name'], directory=directory,project=project)
+        dataset = DataSet(name=post['name'].value(), directory=directory.pk,project=project)
+        # print('directory_id', dataset.directory_id)
         dataset.save()
         name = ''
         for filename, file in request.FILES.iteritems():
             name = request.FILES[filename].name
-        file = File(name=name,file=request.FILES[name])
+        file = File(name=post['name'].value(),file=post.file.value(),directory=directory)
         file.save()
         return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
     elif request.method == "GET":
@@ -117,7 +119,7 @@ def dataset(request):
 
 def train(request):
     # needs dataset,params,aimodel
-    # 
+    #
     pass
 
 def output(request):
@@ -126,5 +128,3 @@ def output(request):
     #return output
 
     pass
-
-

@@ -20,7 +20,7 @@ class AiModel(models.Model):
 
 class DataSet(models.Model):
     name = models.CharField(max_length=60)
-    directory = models.ForeignKey('Directory', on_delete=models.CASCADE)
+    directory = models.IntegerField()
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
 
 
