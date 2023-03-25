@@ -37,4 +37,4 @@ def trainSVM(data,model,project, pathDir):
 def runSVM(data,file):
     # npdata = np.array(data).reshape(1, -1)
     clf = joblib.load(file)
-    return list(clf.predict([data]))
+    return list(clf.predict(data))
