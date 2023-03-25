@@ -7,6 +7,7 @@ class Project(models.Model):
     name = models.CharField(max_length=60)
     created = models.IntegerField()
     last_updated = models.IntegerField()
+    dataset = models.CharField(max_length=200)
 
 class Directory(models.Model):
     name = models.CharField(max_length=20)

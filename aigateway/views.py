@@ -36,7 +36,7 @@ def proj(request):
         name = json.loads(request.body)['name']
         # print(request.POST)
         now = round(time.time() * 1000)
-        project = Project(name=name, created=now, last_updated=now)
+        project = Project(name=name, created=now, last_updated=now, dataset='')
         project.save()
         return JsonResponse({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]})
 
@@ -57,7 +57,7 @@ def aimodel(request):
         # f=os.path.join( settings.STATIC_ROOT, 'myApp/myData.json' ) if collectstatic invoked
         directory = Directory(name=postDict['name'])
         directory.save()
-        aimodel = AiModel(name=name, typemodel=typemodel,project=project,directory=directory)
+        aimodel = AiModel(name=name, typemodel=typemodel,project=project,directory='')
         aimodel.save()
         return JsonResponse({'models':[{'model_id':aimodel.pk,'name':postDict['name'],'type_model':typemodel,'project_id':project.pk}]})
     elif request.method == 'GET':
@@ -94,32 +94,39 @@ def aimodel(request):
 #     else:
 #         #open the file (create if non existant) for the model, paste the json config
 #         pass
-
+def handle_uploaded_file(f, path):
+    with open(path, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 def dataset(request):
     if request.method == 'POST':
         post = UploadDatasetForm(request.POST, request.FILES)
         project = Project.objects.get(id=int(post["project_id"].value()))
-        directory = Directory(name=project.name)
-        directory.save()
-        dataset = DataSet(name=post['name'].value(), directory=directory.pk,project=project)
-        # print('directory_id', dataset.directory_id)
-        dataset.save()
-        name = ''
-        for filename, file in request.FILES.iteritems():
-            name = request.FILES[filename].name
-        file = File(name=post['name'].value(),file=post.file.value(),directory=directory)
-        file.save()
-        return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
-    elif request.method == "GET":
-        project = Project.objects.get(id=int(post["project_id"]))
-        dataset = project.dataset_set.first()
-        #file = project.dataset_set.first().directory.file_set.first()
-        return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
+        # directory = Directory(name=project.name)
+        # directory.save()
+        # dataset = DataSet(name=post['name'].value(), directory=directory.pk,project=project)
+        # # print('directory_id', dataset.directory_id)
+        # dataset.save()
+        # file = File(name=post['name'].value(),file=post.file.value(),directory=directory)
+        # file.save()
+        path = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{project.name}/dataset.json")
+        project.dataset = path
+        project.save()
+        handle_uploaded_file(request.FILES['file'], path)
+        return JsonResponse({'proj_id':project.pk})
+    # elif request.method == "GET":
+    #     project = Project.objects.get(id=int(post["project_id"]))
+    #     dataset = project.dataset_set.first()
+    #     #file = project.dataset_set.first().directory.file_set.first()
+    #     return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
 
 def train(request):
     # needs dataset,params,aimodel
-    #
+    # update location for aimodel obj to the loc of model file
+    project = Project.objects.get(id=int(request.POST['project_id']))
+    model = AiModel.objects.get(id=int(request.POST['model_id']))
+    
     pass
 
 def output(request):
