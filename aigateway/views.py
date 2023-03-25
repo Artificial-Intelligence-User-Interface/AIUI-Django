@@ -33,9 +33,9 @@ def proj(request):
     elif request.method == "POST":
         name = json.loads(request.body)['name']
         # print(request.POST)
-        project = Project(name=name, created=datetime.now(), last_updated=datetime.now())
+        project = Project(name=name, created=datetime.now().strftime('%Y-%m-%dT%H:%M:%S'), last_updated=datetime.now().strftime('%Y-%m-%dT%H:%M:%S'))
         project.save()
-        return JsonResponse(json.dump({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]}))
+        return JsonResponse(json.dumps({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]}))
 
     
 
