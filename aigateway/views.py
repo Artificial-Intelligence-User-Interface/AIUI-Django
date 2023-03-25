@@ -110,7 +110,7 @@ def dataset(request):
         # file = File(name=post['name'].value(),file=post.file.value(),directory=directory)
         # file.save()
         
-        pathDir = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{project.name}/")
+        pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project.name}/")
         if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
         pathDir += "dataset.json"
