@@ -5,8 +5,8 @@ def get_directory_path(instance, filename):
 # Create your models here.
 class Project(models.Model):
     name = models.CharField(max_length=60)
-    created = models.CharField(max_length=60)
-    last_updated = models.CharField(max_length=60)
+    created = models.IntegerField()
+    last_updated = models.IntegerField()
 
 class Directory(models.Model):
     name = models.CharField(max_length=20)

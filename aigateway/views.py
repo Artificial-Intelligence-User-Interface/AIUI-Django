@@ -5,6 +5,7 @@ from .models import Project, Directory, AiModel, DataSet, File
 from datetime import datetime
 from django.conf import settings
 import os
+import time
 # Create your views here.
 
 def proj(request):
@@ -33,7 +34,8 @@ def proj(request):
     elif request.method == "POST":
         name = json.loads(request.body)['name']
         # print(request.POST)
-        project = Project(name=name, created=str(datetime.now().strftime('%Y-%m-%dT%H:%M:%S')), last_updated=str(datetime.now().strftime('%Y-%m-%dT%H:%M:%S')))
+        time = round(time.time() * 1000)
+        project = Project(name=name, created=time, last_updated=time)
         project.save()
         return JsonResponse({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]})
 
@@ -47,25 +49,26 @@ def aimodel(request):
     # config = models.CharField(max_length=200)
     # directory = models.ForeignKey('Directory', on_delete=models.CASCADE)
     if request.method == 'POST':
-        name = request.POST['name']
-        typemodel = request.POST['model_type']
-        project = Project.objects.get(id=int(request.POST['project_id']))
+        postDict = json.loads(request.body)
+        name = postDict['name']
+        typemodel = postDict['model_type']
+        project = Project.objects.get(id=int(postDict['project_id']))
         # f=os.path.join( settings.STATIC_ROOT, 'myApp/myData.json' ) if collectstatic invoked
-        directory = Directory(name=request.POST['name'])
+        directory = Directory(name=postDict['name'])
         directory.save()
         aimodel = AiModel(name=name, typemodel=typemodel,project=project,directory=directory)
         aimodel.save()
-        return JsonResponse({'models':[{'id':aimodel.pk,'name':request.POST['name'],'created':project.created,'last_updated':project.last_updated}]})
+        return JsonResponse({'models':[{'model_id':aimodel.pk,'name':postDict['name'],'type_model':typemodel,'project_id':project.pk}]})
     elif request.method == 'GET':
         response = {}
         response['models'] = []
-        project = Project.objects.get(id=int(request.POST['project_id']))
+        project = Project.objects.get(id=int(postDict['project_id']))
         for model in project.aimodel_set.all():
             modelAttr = {}
             modelAttr['name'] = model.name
-            modelAttr['type'] = model.type
-            modelAttr['project'] = project.pk
-            modelAttr['id'] = model.pk
+            modelAttr['type_model'] = model.typemodel
+            modelAttr['project_id'] = project.pk
+            modelAttr['model_id'] = model.pk
             response['models'].append(modelAttr)
         return JsonResponse(response)
     
