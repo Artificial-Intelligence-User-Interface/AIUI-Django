@@ -31,5 +31,5 @@ def trainMLP(data,model,project):
 def runMLP(data,file):
     # print(file)
     # npdata = np.array(data).values().reshape(1, -1)
-    # clf = joblib.load(file)
+    clf = joblib.load(file)
     return clf.predict([data])
