@@ -72,24 +72,59 @@ def aimodel(request):
             response['models'].append(modelAttr)
         return JsonResponse(response)
     
-def modelconfig(request):
-    if request.method == 'GET':
-        model = AiModel.objects.get(id=int(request.GET['model_id']))
-        # check to see if there is a new config or just a preset, return based on that
-        config = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/{model.name}.json")
-        if (os.path.exists(config)):
-            with open(config) as f:
-                config = json.load(f)
-            return JsonResponse(config)
-        else:
-            presets = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/presets.json")
-            with open(presets) as f:
-                presets = json.load(f)
-            return JsonResponse(presets)
-    else:
-        #open the file (create if non existant) for the model, paste the json config
-        pass
+# def config(request):
+#     if request.method == 'GET':
+#         model = AiModel.objects.get(id=int(request.GET['model_id']))
+#         # check to see if there is a new config or just a preset, return based on that
+#         # config = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/{model.name}.json")
+#         # if (os.path.exists(config)):
+#         #     with open(config) as f:
+#         #         config = json.load(f)
+#         #     return JsonResponse(config)
+#         # else:
+#         #     presets = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/presets.json")
+#         #     with open(presets) as f:
+#         #         presets = json.load(f)
+#         #     return JsonResponse(presets)
+#         presets = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/presets.json")
+#         with open(presets) as f:
+#             presets = json.load(f)
+#         return JsonResponse(presets)
+#     else:
+#         #open the file (create if non existant) for the model, paste the json config
+#         pass
     
         
+def dataset(request):
+    if request.method == 'POST':
+        post = json.loads(request.body)
+        project = Project.objects.get(id=int(post["project_id"]))
+        directory = Directory(name=project.name)
+        directory.save()
+        dataset = DataSet(name=post['name'], directory=directory,project=project)
+        dataset.save()
+        name = ''
+        for filename, file in request.FILES.iteritems():
+            name = request.FILES[filename].name
+        file = File(name=name,file=request.FILES[name])
+        file.save()
+        return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
+    elif request.method == "GET":
+        project = Project.objects.get(id=int(post["project_id"]))
+        dataset = project.dataset_set.first()
+        #file = project.dataset_set.first().directory.file_set.first()
+        return JsonResponse({'dataset_id':dataset.pk,'dataset_name':dataset.name,'proj_id':project.pk})
+
+def train(request):
+    # needs dataset,params,aimodel
+    # 
+    pass
+
+def output(request):
+    #get the params
+    #run model
+    #return output
+
+    pass
 
 
