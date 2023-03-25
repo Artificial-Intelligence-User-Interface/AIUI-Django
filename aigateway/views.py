@@ -119,7 +119,7 @@ def train(request):
     post = json.loads(request.body)
     project = Project.objects.get(id=int(post['project_id']))
     model = AiModel.objects.get(id=int(post['model_id']))
-    accuracy, pathDir = None, None, None
+    accuracy, pathDir = None, None
     if model.typemodel == 'svg':
         train = trainSVM(project.dataset,model.name,project.name)
         accuracy, pathDir = train[0], train[1]
