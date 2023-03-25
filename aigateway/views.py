@@ -35,7 +35,7 @@ def proj(request):
         # print(request.POST)
         project = Project(name=name, created=datetime.now(), last_updated=datetime.now())
         project.save()
-        return JsonResponse({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]})
+        return JsonResponse(json.dump({'projects':[{'id':project.pk,'name':name,'created':project.created,'last_updated':project.last_updated}]}))
 
     
 
