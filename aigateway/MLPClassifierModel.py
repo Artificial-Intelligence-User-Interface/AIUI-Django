@@ -27,7 +27,7 @@ def trainMLP(data,model,project):
     if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
     model_file = joblib.dump(clf,pathDir + f"{project}_{model}_mlp.joblib")
-    return accuracy, precision, pathDir + f"{project}_{model}_mlp.joblib"
+    return [accuracy, precision, pathDir + f"{project}_{model}_mlp.joblib"]
 
 def runMLP(data,file):
     clf = joblib.load(file)

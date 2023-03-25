@@ -27,7 +27,7 @@ def trainSVM(data,model,project):
     if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
     model_file = joblib.dump(clf,pathDir + f"{project}_{model}_svm.joblib")
-    return accuracy, precision, pathDir + f"{project}_{model}_svm.joblib"
+    return [accuracy, precision, pathDir + f"{project}_{model}_svm.joblib"]
 
 def runSVM(data,file):
     clf = joblib.load(file)
