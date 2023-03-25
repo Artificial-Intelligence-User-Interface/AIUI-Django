@@ -4,6 +4,6 @@ from . import views
 
 app_name = 'aigateway'
 urlpatterns = [
-    path('', views.home, name="home"),
+    path('projects/', views.proj, name="proj"),
 
 ]

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 import json
 from django.http import JsonResponse
-from models import Project, Directory, AiModel, DataSet, File
+from .models import Project, Directory, AiModel, DataSet, File
 from datetime import datetime
-from django.conf import settings
+# from django.conf import settings
 import os
 # Create your views here.
 
@@ -69,7 +69,7 @@ def aimodel(request):
 def modelconfig(request):
     if request.method == 'GET':
         # check to see if there is a new config or just a preset, return based on that
-        
+        pass
     else:
         #open the file (create if non existant) for the model, paste the json config
         pass
