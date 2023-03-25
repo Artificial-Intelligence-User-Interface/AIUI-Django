@@ -13,7 +13,7 @@ def trainMLP(data,model,project, pathDir):
     with open(data) as f:
         dataDict = arff.load(f)
         f.close()
-    arffData = np.array(dataDict['data'])
+    arffData = np.array(dataDict['data'], dtype=float)
     X = arffData[:, :-1]
     Y = arffData[:, -1]
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3,random_state=109)
