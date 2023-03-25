@@ -119,13 +119,13 @@ def train(request):
     post = json.loads(request.body)
     project = Project.objects.get(id=int(post['project_id']))
     model = AiModel.objects.get(id=int(post['model_id']))
-    accuracy, precision, pathDir = None, None, None
+    accuracy, pathDir = None, None, None
     if model.typemodel == 'svg':
         train = trainSVM(project.dataset,model.name,project.name)
-        accuracy, precision, pathDir = train[0], train[1], train[2]
+        accuracy, pathDir = train[0], train[1]
     elif model.typemodel == 'mlp':
         train = trainMLP(project.dataset,model.name,project.name)
-        accuracy, precision, pathDir = train[0], train[1], train[2]
+        accuracy, pathDir = train[0], train[1]
     model.model = pathDir
     return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'accuracy': accuracy, 'precision':precision})
 

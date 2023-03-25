@@ -21,13 +21,12 @@ def trainMLP(data,model,project):
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
     accuracy = metrics.accuracy_score(y_test, y_pred)
-    precision = metrics.precision_score(y_test, y_pred)
     # recall = metrics.recall_score(y_test, y_pred)
     pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project}/{model}/")
     if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
     model_file = joblib.dump(clf,pathDir + f"{project}_{model}_mlp.joblib")
-    return [accuracy, precision, pathDir + f"{project}_{model}_mlp.joblib"]
+    return [accuracy, pathDir + f"{project}_{model}_mlp.joblib"]
 
 def runMLP(data,file):
     clf = joblib.load(file)
