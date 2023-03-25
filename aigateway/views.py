@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 from .models import Project, Directory, AiModel, DataSet, File
 from datetime import datetime
-# from django.conf import settings
+from django.conf import settings
 import os
 # Create your views here.
 
@@ -11,7 +11,7 @@ def proj(request):
     if request.method == 'GET':
         response = {}
         response['projects'] = []
-        if request.GET.get('id'):
+        if request.GET.get('id', False):
             project = Project.objects.filter(id=int(request.GET['id'])).first()
             projAttr = {}
             projAttr['name'] = project.name
@@ -68,8 +68,18 @@ def aimodel(request):
     
 def modelconfig(request):
     if request.method == 'GET':
+        model = AiModel.objects.get(id=int(request.GET['model_id']))
         # check to see if there is a new config or just a preset, return based on that
-        pass
+        config = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/{model.name}.json")
+        if (os.path.exists(config)):
+            with open(config) as f:
+                config = json.load(f)
+            return JsonResponse(config)
+        else:
+            presets = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{model.typemodel}/presets.json")
+            with open(presets) as f:
+                presets = json.load(f)
+            return JsonResponse(presets)
     else:
         #open the file (create if non existant) for the model, paste the json config
         pass
