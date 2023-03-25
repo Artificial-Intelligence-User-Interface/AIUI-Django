@@ -48,8 +48,8 @@ def aimodel(request):
     # presets = models.CharField(max_length=200)
     # config = models.CharField(max_length=200)
     # directory = models.ForeignKey('Directory', on_delete=models.CASCADE)
-    postDict = json.loads(request.body)
     if request.method == 'POST':
+        postDict = json.loads(request.body)
         name = postDict['name']
         typemodel = postDict['model_type']
         project = Project.objects.get(id=int(postDict['project_id']))
@@ -62,7 +62,7 @@ def aimodel(request):
     elif request.method == 'GET':
         response = {}
         response['models'] = []
-        project = Project.objects.get(id=int(postDict['project_id']))
+        project = Project.objects.get(id=int(request.GET['project_id']))
         for model in project.aimodel_set.all():
             modelAttr = {}
             modelAttr['name'] = model.name
