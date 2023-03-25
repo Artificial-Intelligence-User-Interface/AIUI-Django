@@ -30,6 +30,6 @@ def trainSVM(data,model,project):
     return [accuracy, pathDir + f"{project}_{model}_svm.joblib"]
 
 def runSVM(data,file):
-    npdata = np.array(data).reshape(1, -1)
-    clf = joblib.load(file)
+    # npdata = np.array(data).reshape(1, -1)
+    # clf = joblib.load(file)
     return clf.predict([data])
