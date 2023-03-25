@@ -125,7 +125,7 @@ def train(request):
     # print('SVG DIR ', pathDir)
     if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
-    if model.typemodel == 'svg':
+    if model.typemodel == 'svm':
         train = trainSVM(project.dataset,model.name,project.name)
         accuracy, pathDir = train[0], train[1]
     elif model.typemodel == 'mlp':
