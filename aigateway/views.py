@@ -119,7 +119,12 @@ def train(request):
     post = json.loads(request.body)
     project = Project.objects.get(id=int(post['project_id']))
     model = AiModel.objects.get(id=int(post['model_id']))
+    print('MODEL_ID: ', post['model_id'], ' model: ',model)
     accuracy, pathDir = None, None
+    pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project.name}/{model.name}/")
+    # print('SVG DIR ', pathDir)
+    if(not os.path.exists(pathDir)):
+            os.makedirs(pathDir)
     if model.typemodel == 'svg':
         train = trainSVM(project.dataset,model.name,project.name)
         accuracy, pathDir = train[0], train[1]

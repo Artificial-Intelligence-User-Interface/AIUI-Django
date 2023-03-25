@@ -8,7 +8,7 @@ import os
 from django.conf import settings
 
 #used tutorial https://www.datacamp.com/tutorial/svm-classification-scikit-learn-python
-def trainSVM(data,model,project):
+def trainSVM(data,model,project, pathDir):
     dataDict = {}
     with open(data) as f:
         dataDict = arff.load(f)
@@ -23,10 +23,7 @@ def trainSVM(data,model,project):
     accuracy = metrics.accuracy_score(y_test, y_pred)
     # precision = metrics.precision_score(y_test, y_pred)
     # recall = metrics.recall_score(y_test, y_pred)
-    pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project}/{model}/")
-    print('SVG DIR ', pathDir)
-    if(not os.path.exists(pathDir)):
-            os.makedirs(pathDir)
+    
     model_file = joblib.dump(clf,pathDir + f"{project}_{model}_svm.joblib")
     return [accuracy, pathDir + f"{project}_{model}_svm.joblib"]
 

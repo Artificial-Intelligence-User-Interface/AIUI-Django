@@ -8,7 +8,7 @@ import os
 from django.conf import settings
 
 #used documentation https://scikit-learn.org/stable/modules/neural_networks_supervised.html
-def trainMLP(data,model,project):
+def trainMLP(data,model,project, pathDir):
     dataDict = {}
     with open(data) as f:
         dataDict = arff.load(f)
@@ -22,9 +22,6 @@ def trainMLP(data,model,project):
     y_pred = clf.predict(X_test)
     accuracy = metrics.accuracy_score(y_test, y_pred)
     # recall = metrics.recall_score(y_test, y_pred)
-    pathDir = os.path.join( settings.BASE_DIR, f"aigateway/static/aigateway/{project}/{model}/")
-    if(not os.path.exists(pathDir)):
-            os.makedirs(pathDir)
     model_file = joblib.dump(clf,pathDir + f"{project}_{model}_mlp.joblib")
     return [accuracy, pathDir + f"{project}_{model}_mlp.joblib"]
 
