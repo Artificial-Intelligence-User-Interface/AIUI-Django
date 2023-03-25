@@ -149,7 +149,6 @@ def output(request):
     result = None
     if model.typemodel == 'svg':
         result = runSVM(data, pathDir)
-        pass
     elif model.typemodel == 'mlp':
         result = runMLP(data, pathDir)
     return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'result': result})
