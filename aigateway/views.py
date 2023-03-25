@@ -112,7 +112,7 @@ def dataset(request):
         
         pathDir = os.path.join( settings.BASE_DIR, f"myApp/static/myApp/{project.name}/")
         if(not os.path.exists(pathDir)):
-            os.path.makedirs(pathDir)
+            os.makedirs(pathDir)
         pathDir += "dataset.json"
         project.dataset = pathDir
         project.save()
