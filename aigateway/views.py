@@ -126,10 +126,10 @@ def train(request):
     if(not os.path.exists(pathDir)):
             os.makedirs(pathDir)
     if model.typemodel == 'svm':
-        train = trainSVM(project.dataset,model.name,project.name)
+        train = trainSVM(project.dataset,model.name,project.name,pathDir)
         accuracy, pathDir = train[0], train[1]
     elif model.typemodel == 'mlp':
-        train = trainMLP(project.dataset,model.name,project.name)
+        train = trainMLP(project.dataset,model.name,project.name,pathDir)
         accuracy, pathDir = train[0], train[1]
     model.model = pathDir
     model.save()
