@@ -7,7 +7,8 @@ from django.conf import settings
 import os
 import time
 from .forms import UploadDatasetForm
-
+from SvmModel import trainSVM,runSVM
+from MLPClassifierModel import trainMLP, runMLP
 # Create your views here.
 
 def proj(request):
@@ -116,12 +117,28 @@ def train(request):
     # update location for aimodel obj to the loc of model file
     project = Project.objects.get(id=int(request.POST['project_id']))
     model = AiModel.objects.get(id=int(request.POST['model_id']))
-
-    pass
+    accuracy, precision, pathDir = None
+    if model.typemodel == 'svg':
+        accuracy, precision, pathDir = trainSVM(project.dataset,model.name,project.name)
+    elif model.typemodel == 'mlp':
+        accuracy, precision, pathDir = trainMLP(project.dataset,model.name,project.name)
+    model.model = pathDir
+    return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'accuracy': accuracy, 'precision':precision})
+    
 
 def output(request):
     #get the params
     #run model
     #return output
-
-    pass
+    data = request.POST['parameters']
+    project = Project.objects.get(id=int(request.POST['project_id']))
+    model = AiModel.objects.get(id=int(request.POST['model_id']))
+    pathDir = model.model
+    result = None
+    if model.typemodel == 'svg':
+        result = runSVM(data, pathDir)
+        pass
+    elif model.typemodel == 'mlp':
+        result = runMLP(data, pathDir)
+    return JsonResponse({'project_id':project.pk, 'model_id':model.pk, 'result': result})
+    
