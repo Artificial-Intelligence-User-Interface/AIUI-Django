@@ -32,4 +32,4 @@ def trainSVM(data,model,project):
 def runSVM(data,file):
     npdata = np.array(data).reshape(1, -1)
     clf = joblib.load(file)
-    return clf.predict(npdata)
+    return clf.predict([data])
