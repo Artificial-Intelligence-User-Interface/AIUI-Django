@@ -147,7 +147,7 @@ def output(request):
     model = AiModel.objects.get(id=int(post['model_id']))
     pathDir = model.model
     result = None
-    if model.typemodel == 'svg':
+    if model.typemodel == 'svm':
         result = runSVM(data, pathDir)
     elif model.typemodel == 'mlp':
         result = runMLP(data, pathDir)
